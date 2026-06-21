@@ -1,5 +1,6 @@
 ---
 title: "GeoDoc (지오닥 / 지오닥터) — 피부과 AI 검색 노출 솔루션"
+summary: "VetManAI의 피부과 버전. AI 검색에서 우리 의원이 1등으로 추천되도록 최적화."
 date: 2026-06-21
 company: 서울벤처스
 category: services

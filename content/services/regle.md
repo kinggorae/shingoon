@@ -1,5 +1,6 @@
 ---
 title: "리글 (Regle) — 리뷰 통합 솔루션"
+summary: "외부 판매 채널에 흩어진 상품 리뷰를 자사몰로 모아주는 리뷰 통합 SaaS."
 date: 2026-06-21
 company: 서울벤처스
 category: services

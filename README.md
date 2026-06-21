@@ -12,17 +12,30 @@
 
 ## 🛠️ 기술 스택
 
-> 아직 확정 전 — 정적 사이트 기반(예: Astro / Next.js)으로 마크다운 기록을 발행하는 방향을 검토 중.
+- **[Astro](https://astro.build)** — 마크다운 기록을 정적 사이트로 발행 (content collections)
+- **Pretendard** 폰트, 다크 테크 디자인 시스템 (의존성 최소)
+
+### 로컬 실행
+
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # dist/ 정적 빌드
+```
 
 ## 📁 구조
 
 ```
 shingoon/
-├── content/          # 기록 콘텐츠 (마크다운)
-│   ├── journey/      #   지난 여정 — 커리어·삶의 기록
-│   ├── trips/        #   출장 기록 (베트남, 중국 등)
-│   └── services/     #   서비스 런칭 기록
-└── README.md
+├── content/              # 기록 콘텐츠 (마크다운) — 사이트의 원천이자 GitHub 아카이브
+│   ├── about.md          #   신군 프로필
+│   ├── overview.md       #   현재 활동 개요
+│   ├── companies/        #   회사 (서울벤처스, 사이공벤처스)
+│   ├── services/         #   서비스 (리글, VetManAI, GeoDoc, SKYLIVING …)
+│   ├── trips/            #   출장 기록 (베트남, 중국 등) — 예정
+│   └── journey/          #   지난 여정 — 커리어·삶의 기록 — 예정
+├── src/                  # Astro 사이트 (레이아웃·페이지·컴포넌트·스타일)
+└── public/               # 정적 자산 (favicon 등)
 ```
 
 ## 📌 도메인

@@ -1,0 +1,46 @@
+---
+interface Props {
+  eyebrow?: string;
+  status?: string;
+  company?: string;
+  location?: string;
+  tags?: string[];
+  backHref?: string;
+  backLabel?: string;
+}
+const { eyebrow, status, company, location, tags = [], backHref, backLabel } = Astro.props;
+const hasMeta = status || company || location;
+---
+
+<article class="article container">
+  {backHref && (
+    <a href={backHref} class="back">← {backLabel ?? '돌아가기'}</a>
+  )}
+  <header class="art-head">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    {hasMeta && (
+      <div class="art-meta">
+        {company && <span class="badge">{company}</span>}
+        {status && <span class="badge ok">{status}</span>}
+        {location && <span class="badge muted">{location}</span>}
+      </div>
+    )}
+    {tags.length > 0 && (
+      <div class="art-tags">
+        {tags.map((t) => <span class="tag">#{t}</span>)}
+      </div>
+    )}
+  </header>
+  <div class="prose">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .article { max-width: 760px; padding-block: clamp(34px, 5vw, 56px); }
+  .back { display: inline-block; font-size: 14px; font-weight: 600; color: var(--text-2); margin-bottom: 22px; }
+  .back:hover { color: var(--accent-2); }
+  .art-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+  .art-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .art-tags { display: flex; gap: 7px; flex-wrap: wrap; }
+</style>

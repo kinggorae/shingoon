@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const services = (await getCollection('services')).sort(
+  (a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0)
+);
+---
+
+<Base title="서비스 — 신군닷컴" description="신군이 현재 운영·런칭 중인 서비스 목록.">
+  <section class="section">
+    <div class="container">
+      <div class="head">
+        <p class="eyebrow">SERVICES</p>
+        <h1 class="section-title">하고 있는 일</h1>
+        <p class="section-desc">현재 운영·런칭 중인 서비스들. 자료가 모이는 대로 계속 채워집니다.</p>
+      </div>
+      <div class="grid">
+        {services.map((s) => (
+          <a href={`/services/${s.id}`} class="card service-card">
+            <div class="row">
+              {s.data.company && <span class="badge">{s.data.company}</span>}
+              {s.data.status && <span class="badge ok">{s.data.status}</span>}
+            </div>
+            <h3 class="card-title">{s.data.title.split(' — ')[0]}</h3>
+            <p class="card-summary">{s.data.summary}</p>
+            {s.data.tags && (
+              <div class="card-tags">
+                {s.data.tags.slice(0, 4).map((t) => <span class="tag">#{t}</span>)}
+              </div>
+            )}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 34px; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card-title { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 16px; }
+  .card-summary { color: var(--text-2); font-size: 0.96rem; margin-top: 12px; line-height: 1.7; word-break: keep-all; }
+  .card-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 16px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+</style>

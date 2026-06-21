@@ -1,5 +1,6 @@
 ---
 title: "사이공벤처스 (Saigon Ventures)"
+summary: "서울벤처스의 베트남 법인. 한국 제품·서비스의 베트남 시장 진출을 돕는다."
 date: 2026-06-21
 category: companies
 location: "베트남, 호치민(사이공)"

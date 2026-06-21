@@ -1,5 +1,6 @@
 ---
 title: "SKYLIVING — 베트남 프리미엄 청소·시설관리"
+summary: "하노이 랜드마크(Keangnam Landmark72 등)를 관리하는 프리미엄 청소·시설관리 서비스."
 date: 2026-06-21
 company: KYT Vietnam Co., Ltd.
 category: services

@@ -1,0 +1,17 @@
+{
+  "name": "shingoon",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "신군닷컴 (shingoon.com) — 지난 여정과 현재 진행 중인 일을 기록하는 개인 웹사이트",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.6.1"
+  }
+}

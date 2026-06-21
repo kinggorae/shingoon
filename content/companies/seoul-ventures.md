@@ -1,5 +1,6 @@
 ---
 title: "서울벤처스 (Seoul Ventures)"
+summary: "이커머스 테크·마케팅·광고·교육을 통합 제공하는 성장 솔루션 회사. 2018년 설립."
 date: 2026-06-21
 category: companies
 location: "한국, 서울"

@@ -1,5 +1,6 @@
 ---
 title: "VetManAI (베트맨AI) — 동물병원 AI 검색 노출 솔루션"
+summary: "AI 챗봇이 동물병원을 추천할 때 우리 병원이 1등으로 노출되게 하는 GEO 솔루션."
 date: 2026-06-21
 company: 서울벤처스
 category: services
