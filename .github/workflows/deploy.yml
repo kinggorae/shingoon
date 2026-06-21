@@ -28,13 +28,17 @@ jobs:
       - name: Build static site
         run: npm run build # ASTRO_KEYSTATIC=0 → 순수 정적 dist/
 
-      - name: Deploy via rsync over SSH (password)
-        # SSH 키 추가가 막힌 플랜이라, SSH 비밀번호(=FTP 비밀번호) 인증 사용.
-        # 비밀번호는 env(SSHPASS)로만 전달되어 명령줄에 노출되지 않는다.
+      - name: Deploy via SFTP (lftp mirror)
+        # 이 SSH 계정은 셸이 /sbin/nologin (SFTP 전용)이라 rsync 불가.
+        # lftp의 SFTP mirror로 셸 없이 동기화한다. 비밀번호는 env(LFTP_PASSWORD)로만 전달.
         env:
-          SSHPASS: ${{ secrets.FTP_PASSWORD }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass rsync
-          sshpass -e rsync -rltgoDzvO --delete \
-            -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-            dist/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:public_html/"
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          lftp -u "${{ secrets.SSH_USER }}" --env-password \
+            sftp://${{ secrets.SSH_HOST }}:${{ secrets.SSH_PORT }} -e "
+              set sftp:auto-confirm yes;
+              set net:timeout 20; set net:max-retries 3;
+              mirror -R --delete --verbose --parallel=4 dist/ public_html/;
+              bye
+            "
