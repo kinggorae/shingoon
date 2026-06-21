@@ -1,22 +1,28 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import { categoryLabel } from '../lib/categories';
 
 const WORK_ORDER = ['brand-commerce-growth', 'global-export', 'animal-hospital-mso', 'human-hospital-marketing'];
 const work = (await getCollection('work')).sort(
   (a, b) => WORK_ORDER.indexOf(a.id) - WORK_ORDER.indexOf(b.id)
 );
-const companies = (await getCollection('companies')).sort((a, b) =>
-  a.id === 'seoul-ventures' ? -1 : b.id === 'seoul-ventures' ? 1 : 0
-);
 const services = (await getCollection('services')).sort(
   (a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0)
 );
+const posts = (await getCollection('posts'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+
+const fmt = (date) =>
+  new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+const postHref = (id) => `/blog/${id.replace(/\/index$/, '')}`;
 
 const stats = [
   { label: '거점', value: '서울 ↔ 사이공' },
   { label: '창업', value: '7번' },
-  { label: '운영 회사', value: '2곳' },
+  { label: '주력 사업', value: `${work.length}` },
   { label: '서비스', value: `${services.length}+` },
 ];
 ---
@@ -35,8 +41,8 @@ const stats = [
         서울에서 시작해 베트남까지 — 그동안 해온 일들과 지금 하고 있는 일을 이곳에 기록합니다.
       </p>
       <div class="hero-actions">
-        <a href="/about" class="btn btn-primary">신군은 누구인가 →</a>
-        <a href="/services" class="btn btn-ghost">하고 있는 일 보기</a>
+        <a href="/blog" class="btn btn-primary">최신 글 보기 →</a>
+        <a href="/about" class="btn btn-ghost">신군은 누구인가</a>
       </div>
       <div class="hero-stats">
         {stats.map((s) => (
@@ -50,8 +56,40 @@ const stats = [
     <div class="hero-glow" aria-hidden="true"></div>
   </section>
 
+  <!-- LATEST POSTS (BLOG) -->
+  {posts.length > 0 && (
+    <section class="section" id="blog">
+      <div class="container">
+        <div class="head head-row">
+          <div>
+            <p class="eyebrow">BLOG</p>
+            <h2 class="section-title">최신 글</h2>
+          </div>
+          <a href="/blog" class="head-link">전체 글 보기 →</a>
+        </div>
+        <div class="blog-grid">
+          {posts.map((p) => (
+            <a href={postHref(p.id)} class="card post-card">
+              {p.data.cover && (
+                <img class="post-card-cover" src={p.data.cover} alt="" width="640" height="360" loading="lazy" />
+              )}
+              <div class="post-card-body">
+                <div class="row">
+                  {p.data.category && <span class="badge">{categoryLabel(p.data.category)}</span>}
+                  <time class="post-card-date" datetime={p.data.publishDate.toISOString()}>{fmt(p.data.publishDate)}</time>
+                </div>
+                <h3 class="post-card-title">{p.data.title}</h3>
+                <p class="card-summary">{p.data.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- MAIN WORK / FOCUS -->
-  <section class="section" id="work">
+  <section class="section section-tight" id="work">
     <div class="container">
       <div class="head">
         <p class="eyebrow">MAIN WORK</p>
@@ -74,30 +112,8 @@ const stats = [
     </div>
   </section>
 
-  <!-- COMPANIES -->
-  <section class="section section-tight" id="companies">
-    <div class="container">
-      <div class="head">
-        <p class="eyebrow">COMPANIES</p>
-        <h2 class="section-title">운영 중인 회사</h2>
-      </div>
-      <div class="grid grid-2">
-        {companies.map((c) => (
-          <a href={`/companies/${c.id}`} class="card company-card">
-            <div class="row">
-              <h3 class="card-title">{c.data.title}</h3>
-              {c.data.location && <span class="badge muted">{c.data.location}</span>}
-            </div>
-            <p class="card-summary">{c.data.summary}</p>
-            <span class="card-link">자세히 보기 →</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- SERVICES -->
-  <section class="section" id="services">
+  <section class="section section-tight" id="services">
     <div class="container">
       <div class="head">
         <p class="eyebrow">SERVICES</p>
@@ -146,7 +162,19 @@ const stats = [
 
   /* Section heads */
   .head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 34px; }
+  .head-row { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .head-link { font-size: 14px; font-weight: 700; color: var(--accent-2); white-space: nowrap; }
+  .head-link:hover { color: #67e8f9; }
   .section-tight { padding-top: 0; }
+
+  /* Blog cards */
+  .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .post-card { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+  .post-card-cover { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-bottom: 1px solid var(--border); }
+  .post-card-body { padding: 22px 22px 24px; display: flex; flex-direction: column; }
+  .post-card-date { font-size: 12px; color: var(--text-3); font-family: var(--mono); }
+  .post-card-title { font-size: 1.18rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.35; margin-top: 12px; word-break: keep-all; }
+  .post-card:hover .post-card-title { color: #fff; }
 
   /* Main work cards */
   .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
@@ -161,24 +189,23 @@ const stats = [
 
   /* Grids */
   .grid { display: grid; gap: 18px; }
-  .grid-2 { grid-template-columns: repeat(2, 1fr); }
   .grid-3 { grid-template-columns: repeat(3, 1fr); }
 
   .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .card-title { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
-  .company-card .card-title { margin-bottom: 0; }
   .card-summary { color: var(--text-2); font-size: 0.95rem; margin-top: 12px; line-height: 1.7; word-break: keep-all; }
   .card-link { display: inline-block; margin-top: 16px; font-size: 13.5px; font-weight: 700; color: var(--accent-2); }
   .service-card .card-title { margin-top: 16px; }
 
   @media (max-width: 960px) {
     .work-grid { grid-template-columns: 1fr; }
+    .blog-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 860px) {
     .grid-3 { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 600px) {
     .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; }
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .grid-3, .blog-grid { grid-template-columns: 1fr; }
   }
 </style>
