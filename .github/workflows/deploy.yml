@@ -30,15 +30,14 @@ jobs:
 
       - name: Deploy via SFTP (lftp mirror)
         # 이 SSH 계정은 셸이 /sbin/nologin (SFTP 전용)이라 rsync 불가.
-        # lftp의 SFTP mirror로 셸 없이 동기화한다. 비밀번호는 env(LFTP_PASSWORD)로만 전달.
+        # lftp의 SFTP mirror로 셸 없이 동기화. 비밀번호는 sshpass(env SSHPASS)로 ssh에 주입.
         env:
-          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          SSHPASS: ${{ secrets.FTP_PASSWORD }}
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-          lftp -u "${{ secrets.SSH_USER }}" --env-password \
-            sftp://${{ secrets.SSH_HOST }}:${{ secrets.SSH_PORT }} -e "
-              set sftp:auto-confirm yes;
-              set net:timeout 20; set net:max-retries 3;
-              mirror -R --delete --verbose --parallel=4 dist/ public_html/;
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp sshpass
+          lftp sftp://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PORT }} -e "
+              set sftp:connect-program 'sshpass -e ssh -a -x -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null';
+              set net:timeout 20; set net:max-retries 2;
+              mirror -R --delete --verbose --parallel=2 dist/ public_html/;
               bye
             "
