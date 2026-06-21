@@ -1,6 +1,7 @@
 name: Deploy to Hostinger
 
-# main에 푸시하면 정적 빌드 후 Hostinger로 FTP 업로드
+# main에 푸시하면 정적 빌드 후 SSH(rsync)로 Hostinger에 배포.
+# Hostinger가 클라우드 IP의 FTP를 막아서, SSH/SFTP 경로로 우회한다.
 on:
   push:
     branches: [main]
@@ -27,16 +28,14 @@ jobs:
       - name: Build static site
         run: npm run build # ASTRO_KEYSTATIC=0 → 순수 정적 dist/
 
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy via SSH (rsync)
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_REMOTE_DIR }} # 예: public_html/  (끝에 / 필수)
-          local-dir: ./dist/
-          protocol: ftp # Hostinger 공유 호스팅은 일반 FTP가 안정적 (FTPS는 타임아웃)
-          timeout: 60000
-          # 첫 배포: 기존 워드프레스 파일을 정리하고 새 사이트로 교체.
-          # 첫 배포 성공 후에는 이 줄을 제거해 증분(변경분만) 배포로 전환.
-          dangerous-clean-slate: true
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_PORT: ${{ secrets.SSH_PORT }}
+          SOURCE: dist/
+          TARGET: ${{ secrets.SSH_TARGET }} # public_html/
+          # --delete: 원격에 없어야 할 파일(기존 워드프레스 등) 제거 → 깨끗한 미러
+          ARGS: "-rltgoDzvO --delete"
