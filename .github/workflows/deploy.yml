@@ -35,7 +35,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_REMOTE_DIR }} # 예: public_html/  (끝에 / 필수)
           local-dir: ./dist/
-          protocol: ftps
+          protocol: ftp # Hostinger 공유 호스팅은 일반 FTP가 안정적 (FTPS는 타임아웃)
+          timeout: 60000
           # 첫 배포: 기존 워드프레스 파일을 정리하고 새 사이트로 교체.
           # 첫 배포 성공 후에는 이 줄을 제거해 증분(변경분만) 배포로 전환.
           dangerous-clean-slate: true
