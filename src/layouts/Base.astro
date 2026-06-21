@@ -32,6 +32,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:locale" content="ko_KR" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
+    <slot name="head" />
   </head>
   <body>
     <Header />

@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 import path from 'node:path';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'content');
@@ -38,6 +39,7 @@ function rehypeRelativeMdLinks() {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://shingoon.com',
+  integrations: [sitemap()],
   markdown: {
     rehypePlugins: [rehypeRelativeMdLinks],
     shikiConfig: {
