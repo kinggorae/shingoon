@@ -38,3 +38,6 @@ Thumbs.db
 # Misc
 *.local
 .cache/
+
+# Claude Code (local-only settings)
+.claude/settings.local.json
