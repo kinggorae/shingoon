@@ -1,0 +1,24 @@
+# 신군닷컴 정적 사이트 (Astro) — Apache 설정
+
+# 커스텀 404
+ErrorDocument 404 /404.html
+
+# 디렉터리 인덱스
+DirectoryIndex index.html
+
+# gzip 압축
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
+</IfModule>
+
+# 정적 자산 캐싱 (Astro는 _astro/ 에 해시를 붙이므로 장기 캐시 안전)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
