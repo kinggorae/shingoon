@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { categoryLabel } from '../../lib/categories';
 
 const postSlug = (id) => id.replace(/\/index$/, '');
 
@@ -64,7 +65,11 @@ const breadcrumbLd = {
     { '@type': 'ListItem', position: 3, name: d.title, item: canonical },
   ],
 };
+if (d.cover) {
+  articleLd.image = new URL(d.cover, Astro.site).toString();
+}
 const jsonLd = [articleLd, breadcrumbLd, ...(faqLd ? [faqLd] : [])];
+const coverUrl = d.cover ? new URL(d.cover, Astro.site).toString() : null;
 ---
 
 <Base title={`${d.title} — 신군닷컴`} description={d.description}>
@@ -77,12 +82,15 @@ const jsonLd = [articleLd, breadcrumbLd, ...(faqLd ? [faqLd] : [])];
   ))}
   <meta slot="head" property="og:type" content="article" />
   <meta slot="head" property="article:published_time" content={published} />
+  {coverUrl && <meta slot="head" property="og:image" content={coverUrl} />}
+  {coverUrl && <meta slot="head" name="twitter:image" content={coverUrl} />}
 
   <article class="post container">
     <a href="/blog" class="back">← 블로그</a>
 
     <header class="post-head">
       <div class="post-tags">
+        {d.category && <span class="badge">{categoryLabel(d.category)}</span>}
         {d.tags.map((t) => <span class="tag">#{t}</span>)}
       </div>
       <h1 class="post-title">{d.title}</h1>
@@ -95,6 +103,10 @@ const jsonLd = [articleLd, breadcrumbLd, ...(faqLd ? [faqLd] : [])];
         <span>약 {minutes}분</span>
       </div>
     </header>
+
+    {coverUrl && (
+      <img class="post-cover" src={d.cover} alt={d.title} width="1200" height="630" loading="eager" />
+    )}
 
     {d.tldr.length > 0 && (
       <aside class="tldr" aria-label="핵심 요약">
@@ -146,6 +158,10 @@ const jsonLd = [articleLd, breadcrumbLd, ...(faqLd ? [faqLd] : [])];
   .post-desc { margin-top: 16px; color: var(--text-2); font-size: 1.08rem; line-height: 1.7; word-break: keep-all; }
   .post-meta { display: flex; gap: 8px; align-items: center; margin-top: 18px; font-size: 13.5px; color: var(--text-3); font-family: var(--mono); flex-wrap: wrap; }
 
+  .post-cover {
+    width: 100%; aspect-ratio: 1200 / 630; object-fit: cover;
+    margin-top: 30px; border-radius: var(--r-lg); border: 1px solid var(--border);
+  }
   .tldr {
     margin-top: 30px; padding: 22px 24px; border-radius: var(--r-lg);
     background: var(--grad-soft); border: 1px solid rgba(91, 140, 255, 0.22);

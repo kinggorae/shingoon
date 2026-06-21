@@ -32,6 +32,7 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(), // 메타 설명 (검색·AI 답변 노출 핵심)
+    category: z.string().optional(),
     publishDate: z.coerce.date(),
     updatedDate: z.coerce.date().nullable().optional(),
     author: z.string().default('신현규 (Ryan Shin)'),

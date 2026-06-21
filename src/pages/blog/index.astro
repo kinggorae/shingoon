@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { categoryLabel } from '../../lib/categories';
 
 const posts = (await getCollection('posts'))
   .filter((p) => !p.data.draft)
@@ -8,6 +9,9 @@ const posts = (await getCollection('posts'))
 
 const fmt = (date) =>
   new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+
+// 글에 실제로 쓰인 카테고리만 필터 탭으로
+const usedCategories = [...new Set(posts.map((p) => p.data.category).filter(Boolean))];
 ---
 
 <Base title="블로그 — 신군닷컴" description="신군이 기록하는 일과 생각. AI 검색·커머스·해외 진출에 대한 글.">
@@ -19,14 +23,29 @@ const fmt = (date) =>
         <p class="section-desc">일하면서 배운 것들 — AI 검색(GEO), 커머스, 해외 진출에 대한 기록.</p>
       </div>
 
+      {usedCategories.length > 0 && (
+        <div class="filters" id="filters">
+          <button class="filter-btn is-active" data-cat="all">전체</button>
+          {usedCategories.map((c) => (
+            <button class="filter-btn" data-cat={c}>{categoryLabel(c)}</button>
+          ))}
+        </div>
+      )}
+
       {posts.length === 0 ? (
         <p class="empty">아직 발행된 글이 없습니다.</p>
       ) : (
-        <ul class="post-list">
+        <ul class="post-list" id="postList">
           {posts.map((p) => (
-            <li>
+            <li data-category={p.data.category ?? ''}>
               <a href={`/blog/${p.id.replace(/\/index$/, '')}`} class="post-row">
+                {p.data.cover && (
+                  <img class="post-thumb" src={p.data.cover} alt="" width="120" height="80" loading="lazy" />
+                )}
                 <div class="post-row-main">
+                  <div class="post-row-cat">
+                    {p.data.category && <span class="badge">{categoryLabel(p.data.category)}</span>}
+                  </div>
                   <h2 class="post-row-title">{p.data.title}</h2>
                   <p class="post-row-desc">{p.data.description}</p>
                   <div class="post-row-meta">
@@ -44,21 +63,52 @@ const fmt = (date) =>
   </section>
 </Base>
 
+<script>
+  const filters = document.getElementById('filters');
+  if (filters) {
+    filters.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      const cat = btn.dataset.cat;
+      filters.querySelectorAll('.filter-btn').forEach((b) => b.classList.toggle('is-active', b === btn));
+      document.querySelectorAll('#postList > li').forEach((li) => {
+        const show = cat === 'all' || li.dataset.category === cat;
+        li.style.display = show ? '' : 'none';
+      });
+    });
+  }
+</script>
+
 <style>
-  .head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 34px; }
+  .head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; }
   .empty { color: var(--text-3); }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .filter-btn {
+    padding: 7px 15px; border-radius: var(--pill); border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02); color: var(--text-2); font-size: 13.5px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s ease;
+  }
+  .filter-btn:hover { color: var(--text); border-color: var(--border-2); }
+  .filter-btn.is-active { background: var(--grad); color: #05080f; border-color: transparent; }
+
   .post-list { display: flex; flex-direction: column; gap: 4px; }
   .post-row {
-    display: flex; align-items: center; gap: 18px; padding: 24px 20px; border-radius: var(--r-lg);
+    display: flex; align-items: center; gap: 18px; padding: 22px 20px; border-radius: var(--r-lg);
     border: 1px solid transparent; transition: border-color 0.2s ease, background 0.2s ease;
   }
   .post-row:hover { border-color: var(--border); background: rgba(255, 255, 255, 0.025); }
+  .post-thumb { width: 120px; height: 80px; object-fit: cover; border-radius: var(--r-md); border: 1px solid var(--border); flex-shrink: 0; }
   .post-row-main { flex: 1; min-width: 0; }
+  .post-row-cat { margin-bottom: 8px; }
   .post-row-title { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.3; word-break: keep-all; }
   .post-row:hover .post-row-title { color: #fff; }
   .post-row-desc { margin-top: 8px; color: var(--text-2); font-size: 0.97rem; line-height: 1.65; word-break: keep-all; }
   .post-row-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 12.5px; color: var(--text-3); font-family: var(--mono); flex-wrap: wrap; }
   .post-row-arrow { color: var(--accent-2); font-size: 1.2rem; flex-shrink: 0; opacity: 0; transition: opacity 0.2s ease, transform 0.2s ease; }
   .post-row:hover .post-row-arrow { opacity: 1; transform: translateX(3px); }
-  @media (max-width: 560px) { .post-row-arrow { display: none; } }
+  @media (max-width: 560px) {
+    .post-row-arrow { display: none; }
+    .post-thumb { width: 84px; height: 64px; }
+  }
 </style>
