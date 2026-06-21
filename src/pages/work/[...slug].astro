@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Article from '../../components/Article.astro';
+
+export async function getStaticPaths() {
+  const work = await getCollection('work');
+  return work.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+
+<Base title={`${d.title} — 신군닷컴`} description={d.summary}>
+  <Article
+    eyebrow="MAIN WORK"
+    company={d.company}
+    status={d.status}
+    tags={d.tags}
+    backHref="/"
+    backLabel="홈"
+  >
+    <Content />
+  </Article>
+</Base>

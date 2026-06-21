@@ -21,6 +21,11 @@ const pages = defineCollection({
   schema: recordSchema,
 });
 
+const work = defineCollection({
+  loader: glob({ pattern: '*.md', base: './content/work' }),
+  schema: recordSchema,
+});
+
 const services = defineCollection({
   loader: glob({ pattern: '*.md', base: './content/services' }),
   schema: recordSchema,
@@ -41,4 +46,4 @@ const journey = defineCollection({
   schema: recordSchema,
 });
 
-export const collections = { pages, services, companies, trips, journey };
+export const collections = { pages, work, services, companies, trips, journey };

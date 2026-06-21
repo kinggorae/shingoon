@@ -2,6 +2,9 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
+const work = (await getCollection('work')).sort((a, b) =>
+  a.id === 'brand-commerce-growth' ? -1 : b.id === 'brand-commerce-growth' ? 1 : 0
+);
 const companies = (await getCollection('companies')).sort((a, b) =>
   a.id === 'seoul-ventures' ? -1 : b.id === 'seoul-ventures' ? 1 : 0
 );
@@ -46,8 +49,32 @@ const stats = [
     <div class="hero-glow" aria-hidden="true"></div>
   </section>
 
+  <!-- MAIN WORK / FOCUS -->
+  <section class="section" id="work">
+    <div class="container">
+      <div class="head">
+        <p class="eyebrow">MAIN WORK</p>
+        <h2 class="section-title">지금 메인으로 하는 일</h2>
+        <p class="section-desc">두 개의 축 — 한국 브랜드를 잘 팔리게 만드는 일, 그리고 병원을 AI 검색 시대의 마케팅으로 키우는 일.</p>
+      </div>
+      <div class="grid grid-2">
+        {work.map((w, i) => (
+          <a href={`/work/${w.id}`} class="card work-card">
+            <span class="work-num">{String(i + 1).padStart(2, '0')}</span>
+            <div class="row">
+              {w.data.status && <span class="badge">{w.data.status}</span>}
+            </div>
+            <h3 class="work-title">{w.data.title.split(' — ')[0]}</h3>
+            <p class="card-summary">{w.data.summary}</p>
+            <span class="card-link">자세히 보기 →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- COMPANIES -->
-  <section class="section" id="companies">
+  <section class="section section-tight" id="companies">
     <div class="container">
       <div class="head">
         <p class="eyebrow">COMPANIES</p>
@@ -118,6 +145,17 @@ const stats = [
 
   /* Section heads */
   .head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 34px; }
+  .section-tight { padding-top: 0; }
+
+  /* Main work cards */
+  .work-card { padding: 30px 28px; }
+  .work-num {
+    font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--accent-2); opacity: 0.8;
+  }
+  .work-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; margin-top: 14px; line-height: 1.3; }
+  .work-card .row { margin-top: 12px; }
+  .work-card .card-summary { font-size: 1rem; }
 
   /* Grids */
   .grid { display: grid; gap: 18px; }
