@@ -28,16 +28,15 @@ jobs:
       - name: Build static site
         run: npm run build # ASTRO_KEYSTATIC=0 → 순수 정적 dist/
 
-      - name: Deploy via SFTP (lftp mirror)
-        # 이 SSH 계정은 셸이 /sbin/nologin (SFTP 전용)이라 rsync 불가.
-        # lftp의 SFTP mirror로 셸 없이 동기화. 비밀번호는 sshpass(env SSHPASS)로 ssh에 주입.
+      - name: Deploy via SFTP (paramiko)
+        # 이 SSH 계정은 셸이 nologin(SFTP 전용)이라 rsync/lftp 대신 paramiko로 직접 SFTP 미러링.
         env:
-          SSHPASS: ${{ secrets.FTP_PASSWORD }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          REMOTE_DIR: public_html
+          LOCAL_DIR: dist
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq lftp sshpass
-          lftp sftp://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PORT }} -e "
-              set sftp:connect-program 'sshpass -e ssh -a -x -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null';
-              set net:timeout 20; set net:max-retries 2;
-              mirror -R --delete --verbose --parallel=2 dist/ public_html/;
-              bye
-            "
+          python3 -m pip install --quiet paramiko
+          python3 scripts/deploy_sftp.py
