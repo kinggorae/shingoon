@@ -14,7 +14,7 @@ export async function GET(context) {
       title: p.data.title,
       description: p.data.description,
       pubDate: p.data.publishDate,
-      link: `/blog/${p.id}/`,
+      link: `/blog/${p.id.replace(/\/index$/, '')}/`,
       categories: p.data.tags,
     })),
     customData: `<language>ko-KR</language>`,

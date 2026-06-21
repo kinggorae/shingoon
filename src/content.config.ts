@@ -26,21 +26,21 @@ const work = defineCollection({
   schema: recordSchema,
 });
 
-// 블로그 글 — GEO/SEO 최적화를 위한 구조화 필드 포함
+// 블로그 글 — GEO/SEO 최적화를 위한 구조화 필드 포함 (Keystatic이 관리)
 const posts = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './content/posts' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/posts' }),
   schema: z.object({
     title: z.string(),
     description: z.string(), // 메타 설명 (검색·AI 답변 노출 핵심)
     publishDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
+    updatedDate: z.coerce.date().nullable().optional(),
     author: z.string().default('신현규 (Ryan Shin)'),
     tags: z.array(z.string()).default([]),
     tldr: z.array(z.string()).default([]), // 핵심 요약 (GEO 친화)
     faqs: z
       .array(z.object({ question: z.string(), answer: z.string() }))
       .default([]),
-    cover: z.string().optional(),
+    cover: z.string().nullable().optional(),
     draft: z.boolean().default(false),
   }),
 });

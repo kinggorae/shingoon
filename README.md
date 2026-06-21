@@ -20,8 +20,16 @@
 ```bash
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # dist/ 정적 빌드
+npm run build    # dist/ 빌드
 ```
+
+### ✍️ 글쓰기 — 어드민 (Keystatic)
+
+`npm run dev` 후 **http://localhost:4321/keystatic** 접속 → 글을 쓰면 `content/posts/`에 마크다운으로 저장됩니다.
+
+- GEO/SEO 구조 필드: 메타 설명 · 핵심 요약(TL;DR) · FAQ · 태그
+- 발행 시 글 페이지에 **JSON-LD(Article·FAQPage·Breadcrumb)**, 메타/OG, 목차, FAQ 아코디언, sitemap·RSS가 자동 적용 → AI 답변엔진·검색 노출 최적화
+- 현재 로컬 모드(파일시스템). 배포 후 어디서나 편집하려면 Keystatic GitHub 모드로 전환 예정.
 
 ## 📁 구조
 

@@ -2,14 +2,20 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 
+const postSlug = (id) => id.replace(/\/index$/, '');
+
 export async function getStaticPaths() {
   const posts = (await getCollection('posts')).filter((p) => !p.data.draft);
-  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  return posts.map((entry) => ({
+    params: { slug: entry.id.replace(/\/index$/, '') },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const d = entry.data;
+const slug = postSlug(entry.id);
 
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
@@ -20,7 +26,7 @@ const fmt = (date) =>
   new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
 const iso = (date) => date.toISOString();
 
-const canonical = new URL(`/blog/${entry.id}`, Astro.site).toString();
+const canonical = new URL(`/blog/${slug}`, Astro.site).toString();
 const published = iso(d.publishDate);
 const modified = iso(d.updatedDate ?? d.publishDate);
 

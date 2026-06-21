@@ -1,6 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
+import keystatic from '@keystatic/astro';
+import node from '@astrojs/node';
 import path from 'node:path';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'content');
@@ -39,7 +43,8 @@ function rehypeRelativeMdLinks() {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://shingoon.com',
-  integrations: [sitemap()],
+  integrations: [mdx(), react(), keystatic(), sitemap()],
+  adapter: node({ mode: 'standalone' }),
   markdown: {
     rehypePlugins: [rehypeRelativeMdLinks],
     shikiConfig: {

@@ -12,8 +12,16 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.14",
+    "@astrojs/node": "^9.5.5",
+    "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^5.6.1"
+    "@keystatic/astro": "^5.1.0",
+    "@keystatic/core": "^0.5.50",
+    "astro": "^5.6.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tslib": "^2.8.1"
   }
 }
