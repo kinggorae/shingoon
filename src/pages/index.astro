@@ -30,20 +30,29 @@ const stats = [
 <Base>
   <!-- HERO -->
   <section class="hero">
-    <div class="container hero-inner">
-      <p class="eyebrow">RYAN SHIN · 신군</p>
-      <h1 class="hero-title">
-        만들고, 띄우고,<br />
-        <span class="grad-text">기록한다.</span>
-      </h1>
-      <p class="hero-desc">
-        2006년부터 온라인 커머스의 길을 걸어온 연쇄 창업가 <strong>신현규</strong>.
-        서울에서 시작해 베트남까지 — 그동안 해온 일들과 지금 하고 있는 일을 이곳에 기록합니다.
-      </p>
-      <div class="hero-actions">
-        <a href="/blog" class="btn btn-primary">최신 글 보기 →</a>
-        <a href="/about" class="btn btn-ghost">신군은 누구인가</a>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">RYAN SHIN · 신군</p>
+        <h1 class="hero-title">
+          만들고, 띄우고,<br />
+          <span class="grad-text">기록한다.</span>
+        </h1>
+        <p class="hero-tagline">
+          비즈니스 바다를 항해한 지 <strong>20년</strong> — 그래도 난 아직,
+          최고의 <strong>동료(나카마)</strong>와 <strong>보물</strong>을 찾아 모험 중이다! 🏴‍☠️
+        </p>
+        <p class="hero-sub">연쇄 창업가 신현규 · 서울에서 사이공까지, 비즈니스가 내 모험.</p>
+        <div class="hero-actions">
+          <a href="/blog" class="btn btn-primary">최신 글 보기 →</a>
+          <a href="/about" class="btn btn-ghost">신군은 누구인가</a>
+        </div>
       </div>
+      <div class="hero-visual">
+        <span class="hero-visual-glow" aria-hidden="true"></span>
+        <img class="hero-luffy" src="/luffy.png" alt="모험을 떠나는 신군 — 밀짚모자를 쓴 루피처럼" width="440" height="660" />
+      </div>
+    </div>
+    <div class="container">
       <div class="hero-stats">
         {stats.map((s) => (
           <div class="stat">
@@ -138,15 +147,37 @@ const stats = [
 
 <style>
   /* Hero */
-  .hero { position: relative; padding-block: clamp(64px, 12vw, 132px) clamp(40px, 7vw, 72px); overflow: hidden; }
-  .hero-inner { position: relative; z-index: 1; }
+  .hero { position: relative; padding-block: clamp(56px, 10vw, 116px) clamp(40px, 7vw, 72px); overflow: hidden; }
+  .hero-grid {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(24px, 5vw, 56px); align-items: center;
+  }
+  .hero-copy { min-width: 0; }
   .hero-title {
-    font-size: clamp(2.6rem, 8vw, 5rem); font-weight: 800; letter-spacing: -0.045em;
+    font-size: clamp(2.4rem, 6.5vw, 4.6rem); font-weight: 800; letter-spacing: -0.045em;
     line-height: 1.05; margin-top: 20px; word-break: keep-all;
   }
-  .hero-desc { margin-top: 24px; max-width: 56ch; color: var(--text-2); font-size: clamp(1rem, 1.6vw, 1.18rem); word-break: keep-all; }
-  .hero-desc strong { color: var(--text); font-weight: 700; }
-  .hero-actions { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+  .hero-tagline {
+    margin-top: 26px; max-width: 32ch; font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    line-height: 1.65; color: var(--text); word-break: keep-all;
+  }
+  .hero-tagline strong { color: var(--accent-2); font-weight: 800; }
+  .hero-sub { margin-top: 14px; font-size: 14px; color: var(--text-3); word-break: keep-all; }
+  .hero-actions { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+
+  /* Luffy visual */
+  .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; min-width: 0; }
+  .hero-visual-glow {
+    position: absolute; width: 80%; height: 80%; border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,140,255,0.28), rgba(34,211,238,0.12) 45%, transparent 70%);
+    filter: blur(36px); z-index: 0;
+  }
+  .hero-luffy {
+    position: relative; z-index: 1; width: 100%; max-width: 420px; height: auto; border-radius: var(--r-xl);
+    border: 1px solid var(--border-2); box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+    animation: heroFloat 5s ease-in-out infinite;
+  }
+  @keyframes heroFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
   .hero-stats {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 52px;
     border-top: 1px solid var(--border); padding-top: 28px;
@@ -203,6 +234,10 @@ const stats = [
   }
   @media (max-width: 860px) {
     .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+    .hero-visual { order: -1; justify-content: center; }
+    .hero-luffy { max-width: 300px; }
+    .hero-tagline { max-width: none; }
   }
   @media (max-width: 600px) {
     .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; }
