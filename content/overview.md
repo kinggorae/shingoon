@@ -12,10 +12,11 @@ tags: [서울벤처스, 사이공벤처스, 현황]
 
 ## 🎯 메인으로 하는 일
 
-지금 신군이 가장 집중하는 두 축:
+지금 신군이 가장 집중하는 세 갈래:
 
-1. **[브랜드 커머스 그로스](work/brand-commerce-growth.md)** — 한국 브랜드 발굴 → 스마트스토어·쿠팡 세팅 → 자사몰 제작 → 판매 온보딩
-2. **[병원 MSO & AI 마케팅](work/healthcare-mso.md)** — 동물병원 MSO + GEO·SEO, 피부과·성형외과·치과로 확장, 해외 환자 유치 준비
+1. **[브랜드 커머스 그로스](work/brand-commerce-growth.md)** — 한국 브랜드 발굴 → 스마트스토어·쿠팡 세팅 → 자사몰 제작 → 판매 온보딩 (기본 운영비 + 매출 수익쉐어)
+2. **[동물병원 MSO](work/animal-hospital-mso.md)** — 제휴 병원 50곳, AI 검색 노출(GEO·SEO) + 디자인 구독
+3. **[사람병원 마케팅](work/human-hospital-marketing.md)** — 피부과·성형외과·치과로 확장, 해외 환자 유치 준비
 
 ## 🏢 운영 회사
 
@@ -31,6 +32,7 @@ tags: [서울벤처스, 사이공벤처스, 현황]
 | **[리글 (Regle)](services/regle.md)** | 서울벤처스 | 외부 채널의 리뷰를 자사몰로 모아주는 리뷰 통합 솔루션 | 운영 중 |
 | **에임드 (AI.MD)** | 서울벤처스 | AI 개인화 상품 추천 서비스 | 운영 중 |
 | **[VetManAI](services/vetman-ai.md)** | 서울벤처스 | 동물병원 AI 검색 노출(GEO) 솔루션 | 운영/런칭 |
+| **[VetMan Solutions](services/vetman-solutions.md)** | 서울벤처스 | 동물병원 전문 디자인 구독 | 운영 중 |
 | **[GeoDoc (지오닥터)](services/geodoc.md)** | 서울벤처스 | 피부과 AI 검색 노출(GEO) 솔루션 | 운영/런칭 |
 | **[SKYLIVING](services/skyliving.md)** | KYT Vietnam | 베트남(하노이) 프리미엄 청소·시설관리 | 운영 중 |
 | _그 외 다수_ | | | |

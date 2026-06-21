@@ -2,8 +2,9 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
-const work = (await getCollection('work')).sort((a, b) =>
-  a.id === 'brand-commerce-growth' ? -1 : b.id === 'brand-commerce-growth' ? 1 : 0
+const WORK_ORDER = ['brand-commerce-growth', 'animal-hospital-mso', 'human-hospital-marketing'];
+const work = (await getCollection('work')).sort(
+  (a, b) => WORK_ORDER.indexOf(a.id) - WORK_ORDER.indexOf(b.id)
 );
 const companies = (await getCollection('companies')).sort((a, b) =>
   a.id === 'seoul-ventures' ? -1 : b.id === 'seoul-ventures' ? 1 : 0
@@ -55,9 +56,9 @@ const stats = [
       <div class="head">
         <p class="eyebrow">MAIN WORK</p>
         <h2 class="section-title">지금 메인으로 하는 일</h2>
-        <p class="section-desc">두 개의 축 — 한국 브랜드를 잘 팔리게 만드는 일, 그리고 병원을 AI 검색 시대의 마케팅으로 키우는 일.</p>
+        <p class="section-desc">세 갈래 — 한국 브랜드를 잘 팔리게 만들고, 동물병원을 키우고, 그 모델을 사람병원으로 넓힌다.</p>
       </div>
-      <div class="grid grid-2">
+      <div class="work-grid">
         {work.map((w, i) => (
           <a href={`/work/${w.id}`} class="card work-card">
             <span class="work-num">{String(i + 1).padStart(2, '0')}</span>
@@ -148,6 +149,7 @@ const stats = [
   .section-tight { padding-top: 0; }
 
   /* Main work cards */
+  .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .work-card { padding: 30px 28px; }
   .work-num {
     font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
@@ -169,6 +171,9 @@ const stats = [
   .card-link { display: inline-block; margin-top: 16px; font-size: 13.5px; font-weight: 700; color: var(--accent-2); }
   .service-card .card-title { margin-top: 16px; }
 
+  @media (max-width: 960px) {
+    .work-grid { grid-template-columns: 1fr; }
+  }
   @media (max-width: 860px) {
     .grid-3 { grid-template-columns: repeat(2, 1fr); }
   }

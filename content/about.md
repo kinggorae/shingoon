@@ -28,9 +28,10 @@ tags: [프로필, 신현규, Ryan Shin, 창업가]
 ## 지금 메인으로 하는 일
 
 1. **[브랜드 커머스 그로스](work/brand-commerce-growth.md)** — 좋은 한국 브랜드를 발굴해 스마트스토어·쿠팡 세팅, 자사몰 제작, 판매 온보딩까지. 온라인에서 제대로 팔리게 만든다.
-2. **[병원 MSO & AI 마케팅](work/healthcare-mso.md)** — 동물병원 MSO에 GEO·SEO를 메인으로. 피부과·성형외과·치과로 확장하고, 해외 환자 유치도 준비 중.
+2. **[동물병원 MSO](work/animal-hospital-mso.md)** — 제휴 동물병원 50곳의 성장 파트너. AI 검색 노출(GEO·SEO)과 디자인 구독이 두 무기.
+3. **[사람병원 마케팅](work/human-hospital-marketing.md)** — 동물병원에서 검증한 모델을 피부과·성형외과·치과로 확장. 해외 환자 유치도 준비 중.
 
-이 일들을 받쳐주는 도구가 **[리글(Regle)](services/regle.md)**, **에임드(AI.MD)**, **[VetManAI](services/vetman-ai.md)**, **[GeoDoc](services/geodoc.md)** 등이다.
+이 일들을 받쳐주는 도구가 **[리글(Regle)](services/regle.md)**, **에임드(AI.MD)**, **[VetManAI](services/vetman-ai.md)**, **[VetMan Solutions](services/vetman-solutions.md)**, **[GeoDoc](services/geodoc.md)** 등이다.
 
 ## 📌 보완 예정
 
