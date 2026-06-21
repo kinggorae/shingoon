@@ -40,11 +40,20 @@ function rehypeRelativeMdLinks() {
   };
 }
 
+// Keystatic 어드민은 개발/로컬에서만 필요하다. 배포(정적 빌드) 시에는
+// ASTRO_KEYSTATIC=0 으로 비활성화해 순수 정적 사이트(dist/)를 만든다.
+const enableKeystatic = process.env.ASTRO_KEYSTATIC !== '0';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://shingoon.com',
-  integrations: [mdx(), react(), keystatic(), sitemap()],
-  adapter: node({ mode: 'standalone' }),
+  integrations: [
+    mdx(),
+    react(),
+    ...(enableKeystatic ? [keystatic()] : []),
+    sitemap(),
+  ],
+  ...(enableKeystatic ? { adapter: node({ mode: 'standalone' }) } : {}),
   markdown: {
     rehypePlugins: [rehypeRelativeMdLinks],
     shikiConfig: {

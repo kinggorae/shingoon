@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "ASTRO_KEYSTATIC=0 astro build",
+    "build:cms": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
