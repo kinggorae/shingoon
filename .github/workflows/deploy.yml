@@ -1,42 +1,42 @@
-name: Deploy to Hostinger
+name: Deploy to GitHub Pages
 
-# main에 푸시하면 정적 빌드 후 SSH(rsync)로 Hostinger에 배포.
-# Hostinger가 클라우드 IP의 FTP를 막아서, SSH/SFTP 경로로 우회한다.
+# main에 푸시하면 정적 빌드 후 GitHub Pages로 배포 (커스텀 도메인 shingoon.com)
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 concurrency:
-  group: deploy-hostinger
+  group: pages
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+      - run: npm ci
+      - run: npm run build # ASTRO_KEYSTATIC=0 → 순수 정적 dist/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build static site
-        run: npm run build # ASTRO_KEYSTATIC=0 → 순수 정적 dist/
-
-      - name: Deploy via SFTP (paramiko)
-        # 이 SSH 계정은 셸이 nologin(SFTP 전용)이라 rsync/lftp 대신 paramiko로 직접 SFTP 미러링.
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          REMOTE_DIR: public_html
-          LOCAL_DIR: dist
-        run: |
-          python3 -m pip install --quiet paramiko
-          python3 scripts/deploy_sftp.py
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
