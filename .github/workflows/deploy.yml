@@ -1,0 +1,41 @@
+name: Deploy to Hostinger
+
+# main에 푸시하면 정적 빌드 후 Hostinger로 FTP 업로드
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static site
+        run: npm run build # ASTRO_KEYSTATIC=0 → 순수 정적 dist/
+
+      - name: Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_REMOTE_DIR }} # 예: public_html/  (끝에 / 필수)
+          local-dir: ./dist/
+          protocol: ftps
+          # 첫 배포: 기존 워드프레스 파일을 정리하고 새 사이트로 교체.
+          # 첫 배포 성공 후에는 이 줄을 제거해 증분(변경분만) 배포로 전환.
+          dangerous-clean-slate: true
