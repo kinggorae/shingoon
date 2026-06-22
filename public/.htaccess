@@ -2,6 +2,15 @@
 DirectoryIndex index.html
 ErrorDocument 404 /404.html
 
+# HTML은 캐시하지 않고 항상 최신 확인 (배포 후 옛 화면이 캐시되는 문제 방지).
+# 해시가 붙은 _astro 자산은 아래에서 장기 캐시.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json image/svg+xml
 </IfModule>
