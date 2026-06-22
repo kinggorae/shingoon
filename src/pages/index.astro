@@ -19,11 +19,13 @@ const fmt = (date) =>
   new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
 const postHref = (id) => `/blog/${id.replace(/\/index$/, '')}`;
 
-const stats = [
-  { label: '거점', value: '서울 ↔ 사이공' },
-  { label: '창업', value: '7번' },
-  { label: '주력 사업', value: `${work.length}` },
-  { label: '서비스', value: `${services.length}+` },
+// 업무 가능 국가
+const countries = [
+  { code: 'kr', name: '한국' },
+  { code: 'vn', name: '베트남' },
+  { code: 'sg', name: '싱가포르' },
+  { code: 'cn', name: '중국' },
+  { code: 'jp', name: '일본' },
 ];
 ---
 
@@ -53,13 +55,19 @@ const stats = [
       </div>
     </div>
     <div class="container">
-      <div class="hero-stats">
-        {stats.map((s) => (
-          <div class="stat">
-            <span class="stat-value">{s.value}</span>
-            <span class="stat-label">{s.label}</span>
-          </div>
-        ))}
+      <div class="hero-reach">
+        <p class="reach-lead">
+          스무 해 동안 일곱 번 창업했고, 지금은 여섯 개의 서비스를 운영합니다.
+          일은 한 항구에 머물지 않아서 — <strong>다섯 나라의 바다</strong>를 오갑니다.
+        </p>
+        <ul class="flags" aria-label="업무 가능 국가">
+          {countries.map((c) => (
+            <li>
+              <img src={`/flags/${c.code}.svg`} alt="" width="26" height="18" loading="lazy" />
+              <span>{c.name}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
     <div class="hero-glow" aria-hidden="true"></div>
@@ -178,13 +186,16 @@ const stats = [
     animation: heroFloat 5s ease-in-out infinite;
   }
   @keyframes heroFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-  .hero-stats {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 52px;
-    border-top: 1px solid var(--border); padding-top: 28px;
+  .hero-reach {
+    margin-top: clamp(40px, 6vw, 56px); padding-top: 28px; border-top: 1px solid var(--border);
   }
-  .stat { display: flex; flex-direction: column; gap: 4px; }
-  .stat-value { font-size: clamp(1.1rem, 2.4vw, 1.6rem); font-weight: 800; letter-spacing: -0.02em; }
-  .stat-label { font-size: 12.5px; color: var(--text-3); font-family: var(--mono); letter-spacing: 0.04em; }
+  .reach-lead {
+    max-width: 58ch; font-size: clamp(1rem, 1.5vw, 1.18rem); line-height: 1.75; color: var(--text-2); word-break: keep-all;
+  }
+  .reach-lead strong { color: var(--text); font-weight: 700; }
+  .flags { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 22px; }
+  .flags li { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: var(--text); }
+  .flags img { width: 26px; height: auto; border-radius: 3px; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45); display: block; }
   .hero-glow {
     position: absolute; top: -20%; right: -10%; width: 50rem; height: 50rem; z-index: 0;
     background: radial-gradient(circle, rgba(91, 140, 255, 0.18), transparent 60%);
@@ -240,7 +251,6 @@ const stats = [
     .hero-tagline { max-width: none; }
   }
   @media (max-width: 600px) {
-    .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; }
     .grid-3, .blog-grid { grid-template-columns: 1fr; }
   }
 </style>
