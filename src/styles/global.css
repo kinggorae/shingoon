@@ -156,6 +156,9 @@ ul { padding: 0; list-style: none; }
 .prose pre code { background: none; padding: 0; }
 .prose hr { height: 1px; background: var(--border); border: 0; margin: 2em 0; }
 .prose img { border-radius: var(--r-md); border: 1px solid var(--border); }
+.prose figure { margin: 1.6em 0; }
+.prose figure img { margin: 0; width: 100%; }
+.prose figcaption { margin-top: 10px; font-size: 0.88rem; color: var(--text-3); text-align: center; font-style: italic; }
 
 /* Tables */
 .prose table { width: 100%; border-collapse: collapse; font-size: 0.94rem; display: block; overflow-x: auto; }
