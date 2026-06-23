@@ -41,3 +41,7 @@ Thumbs.db
 
 # Claude Code (local-only settings)
 .claude/settings.local.json
+
+# 배포 산출물 / 수동 업로드용 아카이브 (저장소에 포함하지 않음)
+/shingoon-site.zip
+*.zip
